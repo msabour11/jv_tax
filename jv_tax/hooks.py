@@ -8,7 +8,18 @@ app_license = "mit"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["frappe", "erpnext"]
+# doc_events = {
+#     "Journal Entry": {
+#         "before_save": "jv_tax.overrides.je.calculate_tax",
+#     }
+# }
+
+doctype_js = {"Journal Entry": "public/js/je.js"}
+override_doctype_class = {"Journal Entry": "jv_tax.overrides.je.CustomJournalEntry"}
+after_install = "jv_tax.install.after_install"
+before_uninstall = "jv_tax.uninstall.before_uninstall"
+
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -43,7 +54,6 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -83,12 +93,10 @@ app_license = "mit"
 # ------------
 
 # before_install = "jv_tax.install.before_install"
-# after_install = "jv_tax.install.after_install"
 
 # Uninstallation
 # ------------
 
-# before_uninstall = "jv_tax.uninstall.before_uninstall"
 # after_uninstall = "jv_tax.uninstall.after_uninstall"
 
 # Integration Setup
@@ -137,13 +145,6 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
 
 # Scheduled Tasks
 # ---------------
@@ -246,4 +247,3 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-
