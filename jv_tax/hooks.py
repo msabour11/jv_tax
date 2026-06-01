@@ -9,11 +9,11 @@ app_license = "mit"
 # ------------------
 
 required_apps = ["frappe", "erpnext"]
-# doc_events = {
-#     "Journal Entry": {
-#         "before_save": "jv_tax.overrides.je.calculate_tax",
-#     }
-# }
+doc_events = {
+    "Sales Order": {
+        "on_update_after_submit": "jv_tax.overrides.api.set_profit_on_update_after_submit",
+    }
+}
 
 doctype_js = {"Journal Entry": "public/js/je.js"}
 override_doctype_class = {"Journal Entry": "jv_tax.overrides.je.CustomJournalEntry"}
