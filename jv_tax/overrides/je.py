@@ -56,14 +56,28 @@ class CustomJournalEntry(JournalEntry):
             if not gross:
                 continue
 
+            total_rate = sum(
+                flt(t.get("rate")) for t in tax_rows if t.get("account_head")
+            )
+            if total_rate:
+                net = flt(gross / (1 + total_rate / 100), 2)
+            else:
+                net = gross
+
             row_tax_total = 0.0
+            valid_tax_rows = [
+                t for t in tax_rows if flt(t.get("rate")) and t.get("account_head")
+            ]
 
-            for tax in tax_rows:
+            for i, tax in enumerate(valid_tax_rows):
                 rate = flt(tax["rate"])
-                if not rate or not tax["account_head"]:
-                    continue
 
-                tax_amount = flt(gross * rate / 100, 2)
+                if i == len(valid_tax_rows) - 1:
+                    # For the last tax row, we adjust to avoid rounding drift
+                    tax_amount = flt(gross - net - row_tax_total, 2)
+                else:
+                    tax_amount = flt(net * rate / 100, 2)
+
                 if not tax_amount:
                     continue
 
@@ -87,7 +101,7 @@ class CustomJournalEntry(JournalEntry):
                 )
 
             # ── Reduce base row: net = gross − tax ───────────────────────
-            net = flt(gross - row_tax_total, 2)
+            # net is already calculated above as gross / (1 + total_rate / 100)
 
             if flt(row.debit_in_account_currency) or flt(row.debit):
                 row.debit_in_account_currency = net

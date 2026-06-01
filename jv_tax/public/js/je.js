@@ -157,13 +157,35 @@ function calculate_and_apply_taxes(frm) {
 					base_row.custom_gross_amount = gross;
 				}
 
-				let row_tax_total = 0;
+				if (!gross) return;
 
+				let total_rate = 0;
 				tax_template_rows.forEach(function (tax) {
-					let rate = flt(tax.rate);
-					if (!rate || !tax.account_head) return;
+					if (tax.account_head) {
+						total_rate += flt(tax.rate);
+					}
+				});
 
-					let tax_amount = flt((gross * rate) / 100, 2);
+				let net = gross;
+				if (total_rate) {
+					net = flt(gross / (1 + total_rate / 100), 2);
+				}
+
+				let row_tax_total = 0;
+				let valid_tax_rows = tax_template_rows.filter(
+					(t) => flt(t.rate) && t.account_head,
+				);
+
+				valid_tax_rows.forEach(function (tax, i) {
+					let rate = flt(tax.rate);
+
+					let tax_amount = 0;
+					if (i === valid_tax_rows.length - 1) {
+						tax_amount = flt(gross - net - row_tax_total, 2);
+					} else {
+						tax_amount = flt((net * rate) / 100, 2);
+					}
+
 					if (!tax_amount) return;
 
 					row_tax_total += tax_amount;
@@ -182,9 +204,7 @@ function calculate_and_apply_taxes(frm) {
 					});
 				});
 
-				// Reduce base row: net = gross - tax
-				let net = flt(gross - row_tax_total, 2);
-
+				// Reduce base row: net = gross - tax (which is exactly 'net' as calculated above)
 				if (base_row.debit_in_account_currency || base_row.debit) {
 					base_row.debit_in_account_currency = net;
 					base_row.debit = net;

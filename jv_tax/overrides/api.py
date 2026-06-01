@@ -1,6 +1,6 @@
 import frappe
 
-logger = frappe.logger("doc events", allow_site=True)
+logger = frappe.logger("doc_events", allow_site=True)
 
 
 def set_profit_on_update_after_submit(doc, method):
@@ -49,7 +49,7 @@ def set_profit_on_update_after_submit(doc, method):
 
     doc.db_set("custom_profit_percentage", custom_profit_percentage)
     # Logging to file: sites/{site}/logs/doc_events.log
-    logger.debug(
+    logger.warning(
         f"Sales Order {doc.name}: Profit={profit}, Percentage={custom_profit_percentage}%"
     )
 
