@@ -9,6 +9,10 @@ def set_profit_on_update_after_submit(doc, method):
     total_cost = 0.0
 
     for item in doc.items:
+        is_stock_item = frappe.db.get_value("Item", item.item_code, "is_stock_item")
+        if not is_stock_item:
+            continue
+
         qty = item.get("qty")
         if not qty:
             qty = 0
@@ -52,5 +56,3 @@ def set_profit_on_update_after_submit(doc, method):
     logger.warning(
         f"Sales Order {doc.name}: Profit={profit}, Percentage={custom_profit_percentage}%"
     )
-
-    print(custom_profit_percentage)

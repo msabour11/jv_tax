@@ -15,10 +15,16 @@ doc_events = {
     }
 }
 
-doctype_js = {"Journal Entry": "public/js/je.js"}
+doctype_js = {
+    "Journal Entry": "public/js/je.js",
+    # "Sales Order": "public/js/sales_order.js",
+}
 override_doctype_class = {"Journal Entry": "jv_tax.overrides.je.CustomJournalEntry"}
 after_install = "jv_tax.install.after_install"
 before_uninstall = "jv_tax.uninstall.before_uninstall"
+# override_whitelisted_methods = {
+#     "erpnext.controllers.accounts_controller.update_child_qty_rate": "jv_tax.overrides.api.update_child_qty_rate"
+# }
 
 
 # Each item in the list will be shown as an app in the apps page
