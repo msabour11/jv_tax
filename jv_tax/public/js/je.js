@@ -3,11 +3,11 @@ frappe.ui.form.on("Journal Entry", {
 		calculate_and_apply_taxes(frm);
 	},
 
-	validate: function (frm) {
-		if (frm.doc.custom_tax_template) {
-			calculate_and_apply_taxes(frm);
-		}
-	},
+	// validate: function (frm) {
+	// 	if (frm.doc.custom_tax_template) {
+	// 		calculate_and_apply_taxes(frm);
+	// 	}
+	// },
 });
 
 frappe.ui.form.on("Journal Entry Account", {
